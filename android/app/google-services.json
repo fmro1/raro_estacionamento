@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "329079699835",
+    "project_id": "raro-estacionamento",
+    "storage_bucket": "raro-estacionamento.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:329079699835:android:1576aeed27a8a151a925de",
+        "android_client_info": {
+          "package_name": "com.example.raro_estacionamento"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "329079699835-9jcjtkb18ukv7padocgninsb4p7hv8ql.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnwM0xl6s5_GRNwXX7j-4w6_OLHK9KPVE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "329079699835-9jcjtkb18ukv7padocgninsb4p7hv8ql.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
