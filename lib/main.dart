@@ -6,6 +6,8 @@ import 'package:raro_estacionamento/controllers/spot_controller.dart';
 import 'package:raro_estacionamento/default_constants/default_ui_sizes.dart';
 import 'package:raro_estacionamento/locator.dart';
 import 'package:raro_estacionamento/views/add_vehicle_view/add_vehicle_view.dart';
+import 'package:raro_estacionamento/views/common/app_bar_background.dart';
+import 'package:raro_estacionamento/views/common/create_route.dart';
 import 'package:raro_estacionamento/views/common/main_big_button.dart';
 import 'package:raro_estacionamento/views/my_spots/my_spots.dart';
 import 'package:raro_estacionamento/views/remove_vehicle_view/remove_vehicle_view.dart';
@@ -35,11 +37,11 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         home: MyHomePage(title: 'Flutter Demo Home Page'),
-        routes: {
-          "/add_vehicle": (context) => AddVehicleView(),
-          "/remove_vehicle": (context) => RemoveVehicleView(),
-          //"/today_history": () => Container(),
-        },
+        // routes: {
+        //   AddVehicleView.ROUTE_PAGE : (context) => AddVehicleView(),
+        //   "/remove_vehicle": (context) => RemoveVehicleView(),
+        //   //"/today_history": () => Container(),
+        // },
       ),
     );
   }
@@ -69,9 +71,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(widget.title),
-      // ),
+      appBar: AppBar(
+        title: Text(widget.title),
+        flexibleSpace: MyAppBarBackground(),
+      ),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -79,18 +82,6 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Container(
-                  width: double.infinity,
-                  height: 70,
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 7, vertical: 17),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        colors: [Colors.greenAccent, Colors.cyan]),
-                  ),
-                ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: kHPadding/2),
                   child: Column(
@@ -105,7 +96,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             text: "Entrada",
                             iconData: Icons.arrow_forward_ios,
                             textColor: Colors.white,
-                            onTap: (){},
+                            onTap: (){
+                              Navigator.of(context).push(
+                                  CreateRoute.pushRoute(AddVehicleView())
+                              );
+                            },
                           )),
                           SizedBox(width: 6,),
                           Expanded(child: MainBigButton(

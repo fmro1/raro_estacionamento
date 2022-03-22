@@ -21,6 +21,7 @@ class SpotController extends ChangeNotifier {
 
   List<Spot> _spots = [];
   List<SpotHistory> _history = [];
+  Spot? newSpotVehicle;
 
   List<SpotHistory> get history => _history;
   List<Spot> get spots => _spots;
