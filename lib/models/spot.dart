@@ -29,4 +29,19 @@ class Spot {
       'outDateTime': outDateTime,
     };
   }
+
+  String spotAsString() {
+    String? plate = this.plate;
+    if(plate != null){
+      plate = "Ocupada: "+plate;
+    }
+    return 'Vaga ${this.id} - ${plate ?? "Livre"}';
+  }
+  ///custom comparing function to check if two users are equal
+  bool isEqual(Spot model) {
+    return this.id == model.id;
+  }
+
+  // @override
+  // String toString() => id.toString();
 }

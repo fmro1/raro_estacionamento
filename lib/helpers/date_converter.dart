@@ -7,4 +7,11 @@ class DateConverter{
     DateTime dateFormatted = DateTime.parse(formatted);
     return dateFormatted.millisecondsSinceEpoch;
   }
+
+  static String dateToString(DateTime dateTime, {String format = "dd/MM/yyyy"}){
+    final DateFormat formatter = DateFormat(format);
+    final String formatted = formatter.format(dateTime);
+    return formatted;
+  }
+
 }

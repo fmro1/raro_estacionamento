@@ -73,86 +73,90 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        elevation: 0,
         flexibleSpace: MyAppBarBackground(),
       ),
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: kHPadding/2),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SizedBox(height: kHPadding/2,),
-                      Row(
-                        children: [
-                          Expanded(child: MainBigButton(
-                            backgroundColor: Colors.green,
-                            text: "Entrada",
-                            iconData: Icons.arrow_forward_ios,
-                            textColor: Colors.white,
-                            onTap: (){
-                              Navigator.of(context).push(
-                                  CreateRoute.pushRoute(AddVehicleView())
-                              );
-                            },
-                          )),
-                          SizedBox(width: 6,),
-                          Expanded(child: MainBigButton(
-                            backgroundColor: Colors.redAccent,
-                            text: "Saída",
-                            iconData: Icons.arrow_back_ios,
-                            textColor: Colors.white,
-                            onTap: (){},
-                          ),)
-                        ],
-                      ),
-                      SizedBox(height: 6,),
-                      Row(
-                        children: [
-                          Expanded(child: MainBigButton(
-                            backgroundColor: Colors.orange,
-                            text: "Hoje",
-                            iconData: Icons.event_available_outlined,
-                            textColor: Colors.white,
-                            onTap: (){},
-                          )),
-                          SizedBox(width: 6,),
-                          Expanded(child: MainBigButton(
-                            backgroundColor: Colors.indigoAccent,
-                            text: "Histórico",
-                            iconData: Icons.assignment_outlined,
-                            textColor: Colors.white,
-                            onTap: (){},
-                          ),)
-                        ],
-                      ),
-                    SizedBox(height: kHPadding/2),
-                    ],
-                  ),
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: kHPadding/2),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SizedBox(height: kHPadding/2,),
+                    Row(
+                      children: [
+                        Expanded(child: MainBigButton(
+                          backgroundColor: Colors.green,
+                          text: "Entrada",
+                          iconData: Icons.arrow_forward_ios,
+                          textColor: Colors.white,
+                          onTap: (){
+                            Navigator.of(context).push(
+                                CreateRoute.pushRoute(AddVehicleView())
+                            );
+                          },
+                        )),
+                        SizedBox(width: 6,),
+                        Expanded(child: MainBigButton(
+                          backgroundColor: Colors.redAccent,
+                          text: "Saída",
+                          iconData: Icons.arrow_back_ios,
+                          textColor: Colors.white,
+                          onTap: (){
+                            Navigator.of(context).push(
+                                CreateRoute.pushRoute(RemoveVehicleView())
+                            );
+                          },
+                        ),)
+                      ],
+                    ),
+                    SizedBox(height: 6,),
+                    Row(
+                      children: [
+                        Expanded(child: MainBigButton(
+                          backgroundColor: Colors.orange,
+                          text: "Hoje",
+                          iconData: Icons.event_available_outlined,
+                          textColor: Colors.white,
+                          onTap: (){},
+                        )),
+                        SizedBox(width: 6,),
+                        Expanded(child: MainBigButton(
+                          backgroundColor: Colors.indigoAccent,
+                          text: "Histórico",
+                          iconData: Icons.assignment_outlined,
+                          textColor: Colors.white,
+                          onTap: (){},
+                        ),)
+                      ],
+                    ),
+                  SizedBox(height: kHPadding/2),
+                  ],
                 ),
-                SizedBox(height: 8,),
-                MySpots(),
+              ),
+              SizedBox(height: 8,),
+              MySpots(),
 
-                // Text('Últimas movimentações'),
-                // Consumer<SpotController>(builder: (_, spotController, __ ){
-                //   return ListView(
-                //     physics: ScrollPhysics(),
-                //     shrinkWrap: true,
-                //     children: [
-                //       ...spotController.history.map((e) => Container(
-                //         child: Text('Historico: ${e.plate}'),)
-                //       ),
-                //     ],
-                //   );
-                // }),
-              ],
-            ),
+              // Text('Últimas movimentações'),
+              // Consumer<SpotController>(builder: (_, spotController, __ ){
+              //   return ListView(
+              //     physics: ScrollPhysics(),
+              //     shrinkWrap: true,
+              //     children: [
+              //       ...spotController.history.map((e) => Container(
+              //         child: Text('Historico: ${e.plate}'),)
+              //       ),
+              //     ],
+              //   );
+              // }),
+            ],
           ),
         ),
       ),

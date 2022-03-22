@@ -10,7 +10,7 @@ class MyAppBarBackground extends StatelessWidget {
           gradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              colors: [Colors.lightGreen, Colors.cyan]),
+              colors: [Colors.indigoAccent, Colors.cyan]),
         ),);
   }
 }

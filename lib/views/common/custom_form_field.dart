@@ -11,6 +11,7 @@ class CustomFormField extends StatelessWidget {
     this.textInputType,
     this.validator,
     this.textEditingController,
+    this.enabled = true,
   }) : super(key: key);
   final String hintText;
   final List<TextInputFormatter>? inputFormatters;
@@ -19,6 +20,7 @@ class CustomFormField extends StatelessWidget {
   final String textName;
   final TextInputType? textInputType;
   final TextEditingController? textEditingController;
+  final bool enabled;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -30,7 +32,7 @@ class CustomFormField extends StatelessWidget {
           children: [
             Expanded(
               child: Container(
-                margin: EdgeInsets.only(left: 2.0, bottom: 10.0),
+                margin: EdgeInsets.only(left: 8.0, bottom: 4.0),
                 child: Text(
                   textName,
                   textAlign: TextAlign.start,
@@ -46,6 +48,7 @@ class CustomFormField extends StatelessWidget {
             keyboardType: textInputType,
             inputFormatters: inputFormatters,
             validator: validator,
+            enabled: enabled,
             decoration: InputDecoration(
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey)),
