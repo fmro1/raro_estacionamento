@@ -97,6 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      SizedBox(height: kHPadding/2,),
                       Row(
                         children: [
                           Expanded(child: MainBigButton(
@@ -106,6 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             textColor: Colors.white,
                             onTap: (){},
                           )),
+                          SizedBox(width: 6,),
                           Expanded(child: MainBigButton(
                             backgroundColor: Colors.redAccent,
                             text: "Saída",
@@ -115,6 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),)
                         ],
                       ),
+                      SizedBox(height: 6,),
                       Row(
                         children: [
                           Expanded(child: MainBigButton(
@@ -124,6 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             textColor: Colors.white,
                             onTap: (){},
                           )),
+                          SizedBox(width: 6,),
                           Expanded(child: MainBigButton(
                             backgroundColor: Colors.indigoAccent,
                             text: "Histórico",
@@ -133,23 +137,25 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),)
                         ],
                       ),
+                    SizedBox(height: kHPadding/2),
                     ],
                   ),
                 ),
+                SizedBox(height: 8,),
                 MySpots(),
 
-                Text('Últimas movimentações'),
-                Consumer<SpotController>(builder: (_, spotController, __ ){
-                  return ListView(
-                    physics: ScrollPhysics(),
-                    shrinkWrap: true,
-                    children: [
-                      ...spotController.history.map((e) => Container(
-                        child: Text('Historico: ${e.plate}'),)
-                      ),
-                    ],
-                  );
-                }),
+                // Text('Últimas movimentações'),
+                // Consumer<SpotController>(builder: (_, spotController, __ ){
+                //   return ListView(
+                //     physics: ScrollPhysics(),
+                //     shrinkWrap: true,
+                //     children: [
+                //       ...spotController.history.map((e) => Container(
+                //         child: Text('Historico: ${e.plate}'),)
+                //       ),
+                //     ],
+                //   );
+                // }),
               ],
             ),
           ),

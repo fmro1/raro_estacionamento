@@ -19,6 +19,7 @@ class MainBigButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.zero,
       color: backgroundColor ?? Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(kDefaultRadius),

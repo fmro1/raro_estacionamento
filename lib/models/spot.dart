@@ -15,8 +15,8 @@ class Spot {
   factory Spot.fromRTDB(Map<String, dynamic> data){
     return Spot(
         id: data['id'] ?? -1,
-        inDateTime: data['inDateTime'] ?? DateTime(2000),
-        outDateTime: data['outDateTime'] ?? DateTime(2000),
+        inDateTime: data['inDateTime'] ,
+        outDateTime: data['outDateTime'] ,
         plate: data['plate']
     );
   }
