@@ -41,8 +41,8 @@ class FirebaseDatabaseController {
         .onValue;
   }
 
-  Stream<DatabaseEvent> getHistoryCustomReference({int pastDays = 0}){
-    return ref.child('history').limitToLast(pastDays).onValue;
+  Future<DatabaseEvent> getHistoryCustomReference({int pastDays = 0}) async {
+    return await ref.child('history').once();
   }
 
   
@@ -84,15 +84,23 @@ class FirebaseDatabaseController {
     }
   }
 
-  removeVehicleFromSpot({required Spot spot, required SpotHistory history}){
+  Future<void> removeVehicleFromSpot({required Spot spot, required SpotHistory history}) async {
     try {
-      int timestamp = DateConverter.convertToDateOnlyTimestamp(spot.inDateTime ?? DateTime.now());
+      int timestamp = DateConverter.convertToDateOnlyTimestamp(
+          spot.outDateTime ?? DateTime.now()
+      );
       String datePath = "$timestamp";
       ref.child('spots/${spot.id}')
-          .update(spot.toJson());
+          .set(spot.toRemoveRTDBMap());
 
-      ref.child('history/$timestamp/${history.key}')
-      .update(history.toRTDBJson());
+      if(history.key == null){
+        ref.child('history/$timestamp')
+            .push()
+            .update(history.toRTDBJson());
+      } else {
+        ref.child('history/$timestamp/${history.key}')
+            .update(history.toRTDBJson());
+      }
     } catch (e){
       print(e);
     }
