@@ -1,30 +1,77 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
+import 'package:raro_estacionamento/controllers/firebase_database_controller.dart';
+import 'package:raro_estacionamento/controllers/spot_controller.dart';
+import 'package:raro_estacionamento/locator.dart';
 
 import 'package:raro_estacionamento/main.dart';
+import 'package:raro_estacionamento/models/spot.dart';
+import 'package:raro_estacionamento/models/spot_history.dart';
+import 'package:raro_estacionamento/views/common/main_big_button.dart';
+import 'package:raro_estacionamento/views/history_today/components/history_card.dart';
+import 'package:raro_estacionamento/views/my_spots/components/spot_card.dart';
+import 'package:raro_estacionamento/views/my_spots/my_spots.dart';
+
+import 'client/client_test.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+  setUpAll(() async {
+    setup(testing: true, setTest: (){
+      locator.registerLazySingleton<FirebaseDatabaseController>(() =>
+          MockFirebaseDatabaseController());
+      locator.registerLazySingleton<SpotController>(() =>
+          SpotController(
+            isTesting: true,
+            firebaseDatabaseController: MockFirebaseDatabaseController(),
+          ));
+    });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  });
+  testWidgets('Main Page', (WidgetTester tester) async {
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    await tester.pumpWidget(MaterialApp(
+        home: ChangeNotifierProvider<SpotController>(
+          create: (_) => locator<SpotController>(),
+          child: MyApp(),
+        )));
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    await tester.pumpWidget(MaterialApp(
+      home: MainBigButton(
+        backgroundColor: Colors.green,
+        text: "Entrada",
+        iconData: Icons.arrow_forward_ios,
+        textColor: Colors.white,
+        onTap: (){},
+      ),
+    ));
+  });
+
+  testWidgets('spot card', (WidgetTester tester) async {
+    Spot fakeSpot = Spot(id: 1,inDateTime: DateTime(2020), outDateTime: DateTime.now(), plate: "ASPÒ" );
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SpotCard(spot: fakeSpot),
+      ),
+    );
+  });
+
+  testWidgets('hisotry card', (WidgetTester tester) async {
+    SpotHistory fakeHistory = SpotHistory(spotId: 4);
+    await tester.pumpWidget(
+      MaterialApp(
+        home: HistoryCard(historySpot: fakeHistory),
+      ),
+    );
+    expect(find.text("Vaga ${fakeHistory.spotId} - "), findsOneWidget);
+  });
+  testWidgets('hisotry card empty', (WidgetTester tester) async {
+    SpotHistory fakeHistory = SpotHistory();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: HistoryCard(historySpot: fakeHistory),
+      ),
+    );
+    expect(find.text("Vaga ${fakeHistory.spotId} - "), findsOneWidget);
   });
 }

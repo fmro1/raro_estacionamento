@@ -11,12 +11,15 @@ import 'package:raro_estacionamento/models/spot_history.dart';
 
 
 class SpotController extends ChangeNotifier {
-  SpotController(){
-    _listenToSpots();
-    _listenToHistory();
+  SpotController({FirebaseDatabaseController? firebaseDatabaseController, bool isTesting = false}){
+    this.firebaseController = firebaseDatabaseController ?? locator<FirebaseDatabaseController>();
+    if(!isTesting){
+      _listenToSpots();
+      _listenToHistory();
+    }
   }
 
-  final FirebaseDatabaseController firebaseController = locator<FirebaseDatabaseController>();
+  late FirebaseDatabaseController firebaseController;
 
   late StreamSubscription _spotsStream;
   late StreamSubscription _historyStream;
@@ -32,8 +35,9 @@ class SpotController extends ChangeNotifier {
     required int spotId,
     required DateTime inDate,
     required TimeOfDay inTime,
-    required String plate,}) async {
-    DateTime newDate = DateTime(inDate.year, inDate.month, inDate.day, inTime.hour, inTime.minute);
+    required String plate,
+  }) async {
+    DateTime newDate = DateConverter.convertValuesToDatetime(inDate, inTime);
     Spot newSpot = Spot(
       id: spotId,
       inDateTime: newDate,
@@ -46,19 +50,21 @@ class SpotController extends ChangeNotifier {
         plate: newSpot.plate,
         inDateTime: newDate
     );
+
     firebaseController.addVehicleInSpot(
         spot: newSpot,
         history: history);
   }
 
+  myPrint() => print('Chew');
 
   Future<void> vehicleOut({required int spotId,
     required DateTime inDate,
     required DateTime outDate,
     required TimeOfDay outTime,
     required String plate,}) async {
-    DateTime newInDate = DateTime(inDate.year, inDate.month, inDate.day, inDate.hour, inDate.minute);
-    DateTime newOutDate = DateTime(outDate.year, outDate.month, outDate.day, outTime.hour, outTime.minute);
+    DateTime newInDate = inDate;
+    DateTime newOutDate = DateConverter.convertValuesToDatetime(outDate, outTime);
 
     Spot newSpot = Spot(
       id: spotId,
@@ -98,6 +104,7 @@ class SpotController extends ChangeNotifier {
     });
     return countIn;
   }
+
   int countTodayOut(){
     int countOut = 0;
     final now = DateTime.now();
@@ -171,6 +178,4 @@ class SpotController extends ChangeNotifier {
     _historyStream.cancel();
     super.dispose();
   }
-
-
 }

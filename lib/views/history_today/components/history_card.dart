@@ -36,6 +36,10 @@ class HistoryCard extends StatelessWidget {
           }()),
           style: defaultStyle,
           ),
+          if(historySpot.error != null)
+          Text("Problema: ${historySpot.error}",
+            style: defaultStyle,
+          ),
         ],
       ),
     );

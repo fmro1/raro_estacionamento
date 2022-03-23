@@ -4,25 +4,32 @@ class Spot {
     this.key,
     this.inDateTime,
     this.outDateTime,
-    this.plate
+    this.plate,
+    this.error,
   });
   int id;
   String? plate;
   String? key;
   DateTime? inDateTime;
   DateTime? outDateTime;
+  String? error;
 
   factory Spot.fromRTDB(Map<String, dynamic> data){
-    return Spot(
-        id: data['id'] ?? -1,
-        inDateTime: data['inDateTime'] != null
-            ? DateTime.fromMillisecondsSinceEpoch(data['inDateTime'])
-            : null,
-        outDateTime: data['outDateTime'] != null
-            ? DateTime.fromMillisecondsSinceEpoch(data['inDateTime'])
-            : null ,
-        plate: data['plate']
-    );
+    try {
+      return Spot(
+          id: data['id'] == null ? -1 : data['id'],
+          inDateTime: data['inDateTime'] != null
+              ? DateTime.fromMillisecondsSinceEpoch(data['inDateTime'])
+              : null,
+          outDateTime: data['outDateTime'] != null
+              ? DateTime.fromMillisecondsSinceEpoch(data['inDateTime'])
+              : null,
+          plate: data['plate']
+      );
+    } catch(e){
+      print(e);
+      return Spot(id: 0, error: "Inconsistência nos dados: $e");
+    }
   }
 
   Map<String, Object?> toRTDBMap() {

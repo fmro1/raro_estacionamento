@@ -1,39 +1,85 @@
 
+import 'dart:async';
+
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get_it/get_it.dart';
 import 'package:mockito/mockito.dart';
 import 'package:raro_estacionamento/controllers/firebase_database_controller.dart';
 import 'package:raro_estacionamento/controllers/spot_controller.dart';
+import 'package:raro_estacionamento/helpers/date_converter.dart';
+import 'package:raro_estacionamento/locator.dart';
 import 'package:raro_estacionamento/models/spot.dart';
-import 'package:raro_estacionamento/models/spot_history.dart';
 
 
 class MockFirebaseDatabaseController extends Mock implements FirebaseDatabaseController {}
-class MockSpotController extends Mock implements SpotController {}
+
+class MockFirebaseDatabase extends Mock implements FirebaseDatabase {
+  final controller = StreamController();
+  @override
+  Stream getSpotsReference() {
+    return controller.stream;
+  }
+
+  @override
+  Stream getHistoryReference() {
+    return controller.stream;
+  }
+}
+
+class MockSpotController extends Mock implements SpotController {
+  @override
+  List<Spot> get spots => [Spot(id: 1,), Spot(id: 2)];
+}
 
 void main() {
-  late SpotController spotController;
-  final sl = GetIt.instance;
-  setUp(() {
-    sl.registerLazySingleton<FirebaseDatabaseController>(() => MockFirebaseDatabaseController());
-    sl.registerLazySingleton<SpotController>(() => MockSpotController());
+  setUpAll(() async {
+    setup(testing: true, setTest: (){
+      locator.registerLazySingleton<FirebaseDatabaseController>(() =>
+          FirebaseDatabaseController(MockFirebaseDatabase()));
+      locator.registerLazySingleton<SpotController>(() =>
+          SpotController(
+              firebaseDatabaseController: MockFirebaseDatabaseController(),
+          ));
+    });
+  });
+  group("my data converter", (){
+    test("date and time of day to datetime", (){
+      final date = DateTime.now();
+      final time = TimeOfDay.now();
+      DateConverter.convertValuesToDatetime(date, time);
+    });
+    test("fake spot success", (){
+      Map spotFake = {'id': 1, 'inDateTime': 1160000, 'plate': 'fakePlate'};
+      final res = Spot.fromRTDB(Map<String, dynamic>.from(spotFake));
+      expect(res, isA<Spot>());
+    });
+    test("fake spot error", (){
+      Map spotFake = {'id': 1.0, 'inDateTime': '1160000', 'plate': 111111};
+      final res = Spot.fromRTDB(Map<String, dynamic>.from(spotFake));
+      expect(res, isA<Spot>());
+    });
+
   });
 
-  test('make request', () async {
-    sl<SpotController>().vehicleIn(
-        spot: Spot(id: 6, plate: "k3r44j3"),
-    );
-    sl<FirebaseDatabaseController>().removeVehicleFromSpot(
-        spot: Spot(id: 6, plate: "asdasd", outDateTime: DateTime.now()),
-      history: SpotHistory(spotId: 6, outDateTime: DateTime.now(),
-        key: "-MygOZ5mxXRXAVtIIL7C",
-      )
-    );
+  test('adição de veiculo', () async {
+    final inDate = DateTime.now();
+    final inTime = TimeOfDay.now();
+    await locator<SpotController>().vehicleIn(
+        spotId: 1,
+        inDate: inDate,
+        inTime: inTime,
+        plate: "123abc1");
   });
 
-  test('add vehicle', () async {
-    int spot = 1;
-    //await spotController.vehicleIn(vehicle: Vehicle(), spot: spot);
-
+  test('remoção de veiculo', () async {
+    final inDate = DateTime.now();
+    final inTime = TimeOfDay.now();
+    await locator<SpotController>().vehicleOut(
+        spotId: 1,
+        inDate: inDate,
+        outTime: inTime,
+        outDate: inDate,
+        plate: "123abc1");
   });
 }

@@ -2,15 +2,15 @@
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:raro_estacionamento/helpers/date_converter.dart';
-import 'package:raro_estacionamento/locator.dart';
 import 'package:raro_estacionamento/models/spot.dart';
 import 'package:raro_estacionamento/models/spot_history.dart';
 
 class FirebaseDatabaseController {
+  FirebaseDatabaseController(this.database);
 
-  FirebaseDatabaseController(FirebaseDatabase database);
+  FirebaseDatabase database;
 
-  DatabaseReference ref = database.ref();
+  late DatabaseReference ref = database.ref();
 
   Future setInitialData() async {
     print('initial data');
@@ -107,15 +107,20 @@ class FirebaseDatabaseController {
   }
 
   testFunction() {
-    // locator<SpotController>().vehicleIn(
-    //     spot: Spot(id: 6, plate: "k3r44j3"),
-    // );
-    // removeVehicleFromSpot(
-    //     spot: Spot(id: 6, plate: "asdasd", outDateTime: DateTime.now()),
-    //   history: SpotHistory(spotId: 6, outDateTime: DateTime.now(),
-    //     key: "-MygOZ5mxXRXAVtIIL7C",
-    //   )
-    // );
+    /*teste remocao de veiculo*/
+    removeVehicleFromSpot(
+        spot: Spot(id: 6, plate: "asdasd", outDateTime: DateTime.now()),
+      history: SpotHistory(spotId: 6, outDateTime: DateTime.now(),
+        key: "-MygOZ5mxXRXAVtIIL7C",
+      )
+    );
+    /*teste adição de veiculo*/
+    addVehicleInSpot(
+        spot: Spot(id: 6, plate: "asdasd", outDateTime: DateTime.now()),
+        history: SpotHistory(spotId: 6, outDateTime: DateTime.now(),
+          key: "-MygOZ5mxXRXAVtIIL7C",
+        )
+    );
   }
 
 }

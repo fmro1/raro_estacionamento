@@ -52,31 +52,42 @@ class SpotCard extends StatelessWidget {
                       ),
                     ),),
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: kVPadding/2, horizontal: kHPadding/2),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Vaga ${spot.id}',
-                        style: TextStyle(fontSize: kTextSize),
-                      ),
-                      Text(((){
-                        if(spot.plate == null){
-                          return "Livre";
-                        } else {
-                          return "Placa: ${spot.plate}";
-                        }
-                      }())),
-                      Text("Entrada: " + ((){
-                        if(spot.inDateTime == null){
-                          return "-";
-                        } else {
-                          return "${DateConverter.dateToString(spot.inDateTime!, format: "dd/MM - HH:mm")}";
-                        }
-                      }())),
-
-                    ],
+                Flexible(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: kVPadding/2, horizontal: kHPadding/2),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text('Vaga ${spot.id}',
+                          style: TextStyle(fontSize: kTextSize),
+                        ),
+                        Text(((){
+                          if(spot.plate == null){
+                            return "Livre";
+                          } else {
+                            return "Placa: ${spot.plate}";
+                          }
+                        }())),
+                        Text("Entrada: " + ((){
+                          if(spot.inDateTime == null){
+                            return "-";
+                          } else {
+                            return "${DateConverter.dateToString(spot.inDateTime!, format: "dd/MM - HH:mm")}";
+                          }
+                        }())),
+                        if(spot.error != null)
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text("${spot.error}",
+                                  style: defaultStyle,
+                                ),
+                              ),
+                            ],
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               ],

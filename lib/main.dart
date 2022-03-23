@@ -59,16 +59,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() async {
-    //locator<FirebaseDatabaseController>().setInitialData();
-    locator<FirebaseDatabaseController>().testFunction();
-
-    setState(() {
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,28 +143,10 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(height: 8,),
               MySpots(),
-
-              // Text('Últimas movimentações'),
-              // Consumer<SpotController>(builder: (_, spotController, __ ){
-              //   return ListView(
-              //     physics: ScrollPhysics(),
-              //     shrinkWrap: true,
-              //     children: [
-              //       ...spotController.history.map((e) => Container(
-              //         child: Text('Historico: ${e.plate}'),)
-              //       ),
-              //     ],
-              //   );
-              // }),
             ],
           ),
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _incrementCounter,
-      //   tooltip: 'Increment',
-      //   child: Icon(Icons.add),
-      // ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

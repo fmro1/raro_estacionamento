@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DateConverter{
@@ -12,6 +13,17 @@ class DateConverter{
     final DateFormat formatter = DateFormat(format);
     final String formatted = formatter.format(dateTime);
     return formatted;
+  }
+
+  static DateTime convertValuesToDatetime(DateTime date, TimeOfDay time){
+    try {
+      DateTime newDate =
+          DateTime(date.year, date.month, date.day, time.hour, time.minute);
+      return newDate;
+    } catch(e) {
+      print(e);
+      return DateTime(1500);
+    }
   }
 
 }

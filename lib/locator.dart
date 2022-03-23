@@ -7,7 +7,13 @@ final locator = GetIt.instance;
 
 FirebaseDatabase database = FirebaseDatabase.instance;
 
-void setup() async {
-  locator.registerLazySingleton<FirebaseDatabaseController>(() => FirebaseDatabaseController(database));
-  locator.registerLazySingleton<SpotController>(() => SpotController());
+void setup({bool testing = false, Function()? setTest}) async {
+  if(!testing){
+    locator.registerLazySingleton<FirebaseDatabaseController>(() => FirebaseDatabaseController(database));
+    locator.registerLazySingleton<SpotController>(() => SpotController());
+  } else {
+    if(setTest != null){
+      setTest();
+    }
+  }
 }
