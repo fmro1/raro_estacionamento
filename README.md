@@ -1,8 +1,6 @@
 # Gerenciador simples de estacionamento
 
-Gerenciador de estacionamento
-
-Aplicativo de teste para gerenciar um estecionamento.
+Aplicativo de teste para gerenciar um estacionamento.
 
 ![Screenshot_1648075725](https://user-images.githubusercontent.com/31592577/159809616-efc6e9f6-e16b-46ee-b2c8-c370a41aebbb.png)
 ![Screenshot_1648075740](https://user-images.githubusercontent.com/31592577/159809684-aeb06d79-587a-4a97-8f03-a77c71c50940.png)
