@@ -18,12 +18,12 @@ class SpotHistory{
       spotId: data['spotId'],
       key: data['key'],
       plate: data['plate']?.toString(),
-      inDateTime: data['inDateTime'] == null
+      inDateTime: data['inDatetime'] == null
           ? null
-          : DateTime.fromMicrosecondsSinceEpoch(data['inDateTime']),
-      outDateTime: data['outDateTime'] == null
+          : DateTime.fromMillisecondsSinceEpoch(data['inDatetime']),
+      outDateTime: data['outDatetime'] == null
           ? null
-          : DateTime.fromMicrosecondsSinceEpoch(data['outDateTime']),
+          : DateTime.fromMillisecondsSinceEpoch(data['outDatetime']),
     );
   }
 

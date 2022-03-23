@@ -34,12 +34,9 @@ class Spot {
     };
   }
 
-  Map<String, Object?> toJson() {
+  Map<String, Object?> toRemoveRTDBMap() {
     return {
       'id': id,
-      'plate': plate,
-      'inDateTime': inDateTime,
-      'outDateTime': outDateTime,
     };
   }
 
