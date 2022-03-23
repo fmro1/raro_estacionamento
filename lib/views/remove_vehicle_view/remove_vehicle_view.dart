@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:raro_estacionamento/controllers/spot_controller.dart';
 import 'package:raro_estacionamento/default_constants/default_ui_sizes.dart';
 import 'package:raro_estacionamento/helpers/date_converter.dart';
+import 'package:raro_estacionamento/locator.dart';
 import 'package:raro_estacionamento/models/spot.dart';
 import 'package:raro_estacionamento/views/common/app_bar_background.dart';
 import 'package:raro_estacionamento/views/common/custom_form_field.dart';
@@ -21,19 +23,28 @@ class RemoveVehicleView extends StatefulWidget {
 
 class _RemoveVehicleViewState extends State<RemoveVehicleView> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _dateController = TextEditingController();
-  TextEditingController _timeController = TextEditingController();
+  TextEditingController _dateOutController = TextEditingController();
+  TextEditingController _timeOutController = TextEditingController();
   TextEditingController _dateInController = TextEditingController();
   TextEditingController _timeInController = TextEditingController();
   TextEditingController _plateController = TextEditingController();
 
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
+  Spot? selectedSpot;
 
   @override
   void initState() {
-    _dateController.text = DateConverter.dateToString(selectedDate, format: "dd/MM/yyyy");
-    _timeController.text = DateConverter.dateToString(selectedDate, format: "HH:mm");
+    /*seta valore iniciais de data e hora now()*/
+    _dateOutController.text = DateConverter.dateToString(selectedDate, format: "dd/MM/yyyy");
+    _timeOutController.text = DateConverter.dateToString(selectedDate, format: "HH:mm");
+    /*verifica se já veio spot pra setar os valores*/
+    if(widget.spot != null){
+      DateTime spotInDateTime = widget.spot!.inDateTime ?? DateTime.now();
+      _dateInController.text = DateConverter.dateToString(spotInDateTime);
+      _timeInController.text = DateConverter.dateToString(spotInDateTime, format: "HH:mm");
+      _plateController.text = widget.spot!.plate ?? '';
+    }
     super.initState();
   }
   @override
@@ -72,6 +83,7 @@ class _RemoveVehicleViewState extends State<RemoveVehicleView> {
                           items: context.read<SpotController>().spots,
                           itemAsString: (Spot? s) => s?.spotAsString() ?? '',
                           onChanged: (Spot? s) {
+                            selectedSpot = s;
                             String? date;
                             String? time;
                             if(s?.inDateTime != null){
@@ -93,7 +105,7 @@ class _RemoveVehicleViewState extends State<RemoveVehicleView> {
                             onTap: () => null,
                             child: AbsorbPointer(
                               child: CustomFormField(
-                                textName: "Data entrada",
+                                textName: "Data de entrada",
                                 hintText: "",
                                 enabled: false,
                                 textEditingController: _dateInController,
@@ -102,11 +114,11 @@ class _RemoveVehicleViewState extends State<RemoveVehicleView> {
                                   FilteringTextInputFormatter
                                       .digitsOnly,
                                 ],
-                                validator: (value){
-                                  if(value == null){
-                                    return "Selecione uma data!";
-                                  } else return null;
-                                },
+                                // validator: (value){
+                                //   if(value == null){
+                                //     return "Selecione uma data!";
+                                //   } else return null;
+                                // },
                               ),
                             ),
                           ),
@@ -125,11 +137,11 @@ class _RemoveVehicleViewState extends State<RemoveVehicleView> {
                                   FilteringTextInputFormatter
                                       .digitsOnly,
                                 ],
-                                validator: (value){
-                                  if(value == null){
-                                    return "Selecione uma hora!";
-                                  } else return null;
-                                },
+                                // validator: (value){
+                                //   if(value == null){
+                                //     return "Selecione uma hora!";
+                                //   } else return null;
+                                // },
                               ),
                             ),
                           ),
@@ -144,7 +156,7 @@ class _RemoveVehicleViewState extends State<RemoveVehicleView> {
                               child: CustomFormField(
                                 textName: "Data de saída",
                                 hintText: "Saída",
-                                textEditingController: _dateController,
+                                textEditingController: _dateOutController,
                                 textInputType: TextInputType.number,
                                 inputFormatters: <TextInputFormatter>[
                                   FilteringTextInputFormatter
@@ -166,7 +178,7 @@ class _RemoveVehicleViewState extends State<RemoveVehicleView> {
                               child: CustomFormField(
                                 textName: "Hora de saída",
                                 hintText: 'Hora',
-                                textEditingController: _timeController,
+                                textEditingController: _timeOutController,
                                 textInputType: TextInputType.number,
                                 inputFormatters: <TextInputFormatter>[
                                   FilteringTextInputFormatter
@@ -199,10 +211,26 @@ class _RemoveVehicleViewState extends State<RemoveVehicleView> {
                           } else return null;
                         },
                       ),
-
-                      TextButton(onPressed: (){
+                      TextButton(onPressed: () async {
                         if(_formKey.currentState!.validate()){
                           print('validação com sucesso!');
+                          if(selectedSpot == null && widget.spot == null){
+                            await CoolAlert.show(
+                              context: context,
+                              type: CoolAlertType.error,
+                              text: "Selecione a vaga",
+                            );
+                          } else {
+                            locator<SpotController>().vehicleOut(
+                                spotId: selectedSpot?.id ?? widget.spot!.id,
+                                inDate: selectedSpot?.inDateTime
+                                    ?? widget.spot!.inDateTime
+                                    ?? DateTime.now(),
+                                outDate: selectedDate,
+                                outTime: selectedTime,
+                                plate: _plateController.text,
+                                );
+                          }
                         }
                       }, child: Text('validate')),
                     ],));
@@ -223,7 +251,7 @@ class _RemoveVehicleViewState extends State<RemoveVehicleView> {
         selectedDate = picked;
         var date =
             "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}";
-        _dateController.text = date;
+        _dateOutController.text = date;
       });
   }
   _selectTime(BuildContext context) async {
@@ -236,7 +264,7 @@ class _RemoveVehicleViewState extends State<RemoveVehicleView> {
       setState(() {
         selectedTime = picked;
         var time = "${picked.hour}:${picked.minute}";
-        _timeController.text = time;
+        _timeOutController.text = time;
       });
   }
 }

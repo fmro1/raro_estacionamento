@@ -40,22 +40,31 @@ class FirebaseDatabaseController {
     return ref.child('history/$todayReference')
         .onValue;
   }
-  
-  addVehicleInSpot({required Spot spot, required SpotHistory history}){
-    updateSpot(spot);
-    addHistory(spot: spot, history: history);
+
+  Stream<DatabaseEvent> getHistoryCustomReference({int pastDays = 0}){
+    return ref.child('history').limitToLast(pastDays).onValue;
   }
 
-  updateSpot(Spot spot){
+  
+  Future<void> addVehicleInSpot({required Spot spot, required SpotHistory history}) async {
+    try{
+      await updateSpot(spot);
+      await addHistory(spot: spot, history: history);
+    } catch(e){
+      print(e);
+    }
+  }
+
+  Future<void> updateSpot(Spot spot) async {
     try {
       ref.child('spots/${spot.id}')
-          .update(spot.toJson());
+          .update(spot.toRTDBMap());
     } catch (e) {
       print(e);
     }
   }
 
-  addHistory({required Spot spot, required SpotHistory history}){
+  Future<void> addHistory({required Spot spot, required SpotHistory history}) async {
     try{
       int timestamp = DateConverter.convertToDateOnlyTimestamp(history.inDateTime ?? DateTime.now());
       String datePath = "$timestamp";

@@ -9,6 +9,7 @@ import 'package:raro_estacionamento/views/add_vehicle_view/add_vehicle_view.dart
 import 'package:raro_estacionamento/views/common/app_bar_background.dart';
 import 'package:raro_estacionamento/views/common/create_route.dart';
 import 'package:raro_estacionamento/views/common/main_big_button.dart';
+import 'package:raro_estacionamento/views/history_today/history_today_view.dart';
 import 'package:raro_estacionamento/views/my_spots/my_spots.dart';
 import 'package:raro_estacionamento/views/remove_vehicle_view/remove_vehicle_view.dart';
 import 'firebase_options.dart';
@@ -125,7 +126,11 @@ class _MyHomePageState extends State<MyHomePage> {
                           text: "Hoje",
                           iconData: Icons.event_available_outlined,
                           textColor: Colors.white,
-                          onTap: (){},
+                          onTap: (){
+                            Navigator.of(context).push(
+                                CreateRoute.pushRoute(HistoryTodayView())
+                            );
+                          },
                         )),
                         SizedBox(width: 6,),
                         Expanded(child: MainBigButton(

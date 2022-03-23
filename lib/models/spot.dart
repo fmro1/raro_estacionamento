@@ -15,10 +15,23 @@ class Spot {
   factory Spot.fromRTDB(Map<String, dynamic> data){
     return Spot(
         id: data['id'] ?? -1,
-        inDateTime: data['inDateTime'] ,
-        outDateTime: data['outDateTime'] ,
+        inDateTime: data['inDateTime'] != null
+            ? DateTime.fromMillisecondsSinceEpoch(data['inDateTime'])
+            : null,
+        outDateTime: data['outDateTime'] != null
+            ? DateTime.fromMillisecondsSinceEpoch(data['inDateTime'])
+            : null ,
         plate: data['plate']
     );
+  }
+
+  Map<String, Object?> toRTDBMap() {
+    return {
+      'id': id,
+      'plate': plate,
+      'inDateTime': inDateTime?.millisecondsSinceEpoch,
+      'outDateTime': outDateTime?.millisecondsSinceEpoch,
+    };
   }
 
   Map<String, Object?> toJson() {
