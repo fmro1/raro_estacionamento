@@ -10,6 +10,7 @@ import 'package:raro_estacionamento/locator.dart';
 import 'package:raro_estacionamento/models/spot.dart';
 import 'package:raro_estacionamento/views/common/app_bar_background.dart';
 import 'package:raro_estacionamento/views/common/custom_form_field.dart';
+import 'package:raro_estacionamento/views/common/custom_outlined_button.dart';
 
 class RemoveVehicleView extends StatefulWidget {
   const RemoveVehicleView({Key? key,
@@ -79,6 +80,7 @@ class _RemoveVehicleViewState extends State<RemoveVehicleView> {
                         child: DropdownSearch<Spot>(
                           mode: Mode.DIALOG,
                           showSearchBox: true,
+                          selectedItem: widget.spot,
                           popupItemDisabled: (Spot s) => s.plate == null,
                           items: context.read<SpotController>().spots,
                           itemAsString: (Spot? s) => s?.spotAsString() ?? '',
@@ -88,7 +90,7 @@ class _RemoveVehicleViewState extends State<RemoveVehicleView> {
                             String? time;
                             if(s?.inDateTime != null){
                               date = DateConverter.dateToString(s!.inDateTime!);
-                              time = DateConverter.dateToString(s!.inDateTime!, format: "HH:mm");
+                              time = DateConverter.dateToString(s.inDateTime!, format: "HH:mm");
                              } else {
                               time = "-";
                               date = "-";
@@ -199,7 +201,7 @@ class _RemoveVehicleViewState extends State<RemoveVehicleView> {
                         textName: "Placa do veículo",
                         hintText: '',
                         enabled: false,
-                        textInputType: TextInputType.number,
+                        textInputType: TextInputType.text,
                         textEditingController: _plateController,
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z]")),
@@ -211,28 +213,32 @@ class _RemoveVehicleViewState extends State<RemoveVehicleView> {
                           } else return null;
                         },
                       ),
-                      TextButton(onPressed: () async {
-                        if(_formKey.currentState!.validate()){
-                          print('validação com sucesso!');
-                          if(selectedSpot == null && widget.spot == null){
-                            await CoolAlert.show(
-                              context: context,
-                              type: CoolAlertType.error,
-                              text: "Selecione a vaga",
-                            );
-                          } else {
-                            locator<SpotController>().vehicleOut(
-                                spotId: selectedSpot?.id ?? widget.spot!.id,
-                                inDate: selectedSpot?.inDateTime
-                                    ?? widget.spot!.inDateTime
-                                    ?? DateTime.now(),
-                                outDate: selectedDate,
-                                outTime: selectedTime,
-                                plate: _plateController.text,
+                      SizedBox(height: 8,),
+                      CustomOutlinedButton(
+                          onTap: () async {
+                            if(_formKey.currentState!.validate()){
+                              print('validação com sucesso!');
+                              if(selectedSpot == null && widget.spot == null){
+                                await CoolAlert.show(
+                                  context: context,
+                                  type: CoolAlertType.error,
+                                  text: "Selecione a vaga",
                                 );
-                          }
-                        }
-                      }, child: Text('validate')),
+                              } else {
+                                locator<SpotController>().vehicleOut(
+                                  spotId: selectedSpot?.id ?? widget.spot!.id,
+                                  inDate: selectedSpot?.inDateTime
+                                      ?? widget.spot!.inDateTime
+                                      ?? DateTime.now(),
+                                  outDate: selectedDate,
+                                  outTime: selectedTime,
+                                  plate: _plateController.text,
+                                ).whenComplete(() => Navigator.of(context).pop());
+                              }
+                            }
+                          },
+                        text: "Salvar",
+                      ),
                     ],));
             },
           ),

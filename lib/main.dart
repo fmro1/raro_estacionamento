@@ -9,6 +9,7 @@ import 'package:raro_estacionamento/views/add_vehicle_view/add_vehicle_view.dart
 import 'package:raro_estacionamento/views/common/app_bar_background.dart';
 import 'package:raro_estacionamento/views/common/create_route.dart';
 import 'package:raro_estacionamento/views/common/main_big_button.dart';
+import 'package:raro_estacionamento/views/history_all/all_history_view.dart';
 import 'package:raro_estacionamento/views/history_today/history_today_view.dart';
 import 'package:raro_estacionamento/views/my_spots/my_spots.dart';
 import 'package:raro_estacionamento/views/remove_vehicle_view/remove_vehicle_view.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => SpotController()),
+        ChangeNotifierProvider(create: (_) => locator<SpotController>()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -138,7 +139,11 @@ class _MyHomePageState extends State<MyHomePage> {
                           text: "Histórico",
                           iconData: Icons.assignment_outlined,
                           textColor: Colors.white,
-                          onTap: (){},
+                          onTap: (){
+                            Navigator.of(context).push(
+                                CreateRoute.pushRoute(AllHistoryView())
+                            );
+                          },
                         ),)
                       ],
                     ),
@@ -165,11 +170,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _incrementCounter,
+      //   tooltip: 'Increment',
+      //   child: Icon(Icons.add),
+      // ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

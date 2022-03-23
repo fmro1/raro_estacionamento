@@ -10,6 +10,7 @@ import 'package:raro_estacionamento/models/spot.dart';
 import 'package:raro_estacionamento/views/common/app_bar_background.dart';
 import 'package:raro_estacionamento/views/common/custom_form_field.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:raro_estacionamento/views/common/custom_outlined_button.dart';
 
 class AddVehicleView extends StatefulWidget {
   const AddVehicleView({
@@ -146,7 +147,7 @@ class _AddVehicleViewState extends State<AddVehicleView> {
                       CustomFormField(
                         textName: "Placa do veículo",
                         hintText: 'ABC1234',
-                        textInputType: TextInputType.number,
+                        textInputType: TextInputType.text,
                         textEditingController: _plateController,
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter.allow(
@@ -160,35 +161,36 @@ class _AddVehicleViewState extends State<AddVehicleView> {
                             return null;
                         },
                       ),
-                      TextButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              print('validação com sucesso!\nVerificando vaga...');
-                              if (selectedSpot == null && widget.spot == null) {
-                                CoolAlert.show(
-                                  context: context,
-                                  type: CoolAlertType.error,
-                                  text: "Selecione uma vaga!",
-                                );
-                              } else {
-                                print("sucesso");
-                                locator<SpotController>().vehicleIn(
-                                  spotId: selectedSpot?.id ?? widget.spot!.id,
-                                    inDate: selectedDate,
-                                    inTime: selectedTime,
-                                    plate: _plateController.text,
-                                    ).whenComplete(() async {
-                                    await CoolAlert.show(
-                                      context: context,
-                                      type: CoolAlertType.success,
-                                      text: "Sucesso",
-                                    );
-                                    Navigator.of(context).pop();
-                                    });
-                              }
-                            }
-                          },
-                          child: Text('validate')),
+                      SizedBox(height: 8,),
+                      CustomOutlinedButton(
+                        text: "Salvar",
+                          onTap: () async {
+                        if (_formKey.currentState!.validate()) {
+                          print('validação com sucesso!\nVerificando vaga...');
+                          if (selectedSpot == null && widget.spot == null) {
+                            CoolAlert.show(
+                              context: context,
+                              type: CoolAlertType.error,
+                              text: "Selecione uma vaga!",
+                            );
+                          } else {
+                            print("sucesso");
+                            locator<SpotController>().vehicleIn(
+                              spotId: selectedSpot?.id ?? widget.spot!.id,
+                              inDate: selectedDate,
+                              inTime: selectedTime,
+                              plate: _plateController.text,
+                            ).whenComplete(() async {
+                              await CoolAlert.show(
+                                context: context,
+                                type: CoolAlertType.success,
+                                text: "Sucesso",
+                              );
+                              Navigator.of(context).pop();
+                            });
+                          }
+                        }
+                      }),
                     ],
                   ));
             },
