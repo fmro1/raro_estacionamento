@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         debugShowCheckedModeBanner: false,
-        home: MyHomePage(title: 'Flutter Demo Home Page'),
+        home: MyHomePage(title: 'Estacionamento'),
         // routes: {
         //   AddVehicleView.ROUTE_PAGE : (context) => AddVehicleView(),
         //   "/remove_vehicle": (context) => RemoveVehicleView(),
