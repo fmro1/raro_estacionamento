@@ -1,5 +1,6 @@
 
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:raro_estacionamento/controllers/firebase_database_controller.dart';
@@ -51,11 +52,11 @@ class SpotController extends ChangeNotifier {
   }
 
 
-  vehicleOut({required int spotId,
+  Future<void> vehicleOut({required int spotId,
     required DateTime inDate,
     required DateTime outDate,
     required TimeOfDay outTime,
-    required String plate,}) {
+    required String plate,}) async {
     DateTime newInDate = DateTime(inDate.year, inDate.month, inDate.day, inDate.hour, inDate.minute);
     DateTime newOutDate = DateTime(outDate.year, outDate.month, outDate.day, outTime.hour, outTime.minute);
 
@@ -69,14 +70,50 @@ class SpotController extends ChangeNotifier {
     SpotHistory history = SpotHistory(
         spotId: newSpot.id,
         plate: newSpot.plate,
-        inDateTime: DateTime.now()
+        inDateTime: newInDate,
+      outDateTime: newOutDate,
     );
 
     firebaseController.removeVehicleFromSpot(spot: newSpot, history: history);
   }
 
-  bool isSpotInUse({required int spot}){
-    return false;
+  bool isSpotInUse({required Spot spot}){
+    return spot.plate != null;
+  }
+
+  int countTodayIn(){
+    int countIn = 0;
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    _historyToday.forEach((element) {
+      if(element.inDateTime != null && element.inDateTime is DateTime){
+        DateTime elementDate = DateTime(
+            element.inDateTime!.year,
+            element.inDateTime!.month,
+            element.inDateTime!.day);
+        if(elementDate.isAtSameMomentAs(today)){
+          countIn++;
+        }
+      }
+    });
+    return countIn;
+  }
+  int countTodayOut(){
+    int countOut = 0;
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    _historyToday.forEach((element) {
+      if(element.outDateTime != null && element.outDateTime is DateTime){
+        DateTime elementDate = DateTime(
+            element.outDateTime!.year,
+            element.outDateTime!.month,
+            element.outDateTime!.day);
+        if(elementDate.isAtSameMomentAs(today)){
+          countOut++;
+        }
+      }
+    });
+    return countOut;
   }
 
   void _listenToSpots() {
@@ -102,6 +139,30 @@ class SpotController extends ChangeNotifier {
       }).toList();
       notifyListeners();
       });
+  }
+
+
+  List<SpotHistory> _allHistory = [];
+  set allHistory(List<SpotHistory> value) {
+    _allHistory = value;
+  }
+  List<SpotHistory> get allHistory => _allHistory;
+
+  Future<void> getAllHistory() async {
+    final data = await firebaseController.getHistoryCustomReference();
+    final daysMap = data.snapshot.children.map((e) => e.value as Map)
+        .toList();
+    final _allHistoryDays = daysMap.map((e) => e).toList();
+    //print(historyMap);
+    _allHistoryDays.forEach((element) {
+      /*converte para SpotHistory()*/
+      List mapList = element.entries.map((e) => e.value).toList();
+      _allHistory.addAll(mapList.map((e) {
+        print('element: $e');
+        return SpotHistory.fromRTDB(Map<String, dynamic>.from(e as Map));
+      }).toList());
+      notifyListeners();
+    });
   }
 
   @override
