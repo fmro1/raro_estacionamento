@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:raro_estacionamento/controllers/spot_controller.dart';
 import 'package:raro_estacionamento/default_constants/default_ui_sizes.dart';
+import 'package:raro_estacionamento/helpers/date_converter.dart';
+import 'package:raro_estacionamento/locator.dart';
 import 'package:raro_estacionamento/models/spot.dart';
+import 'package:raro_estacionamento/views/add_vehicle_view/add_vehicle_view.dart';
+import 'package:raro_estacionamento/views/common/create_route.dart';
+import 'package:raro_estacionamento/views/remove_vehicle_view/remove_vehicle_view.dart';
 
 class SpotCard extends StatelessWidget {
   const SpotCard({Key? key,
@@ -13,7 +19,9 @@ class SpotCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        print('tap');
+        locator<SpotController>().isSpotInUse(spot: spot)
+            ? Navigator.of(context).push(CreateRoute.pushRoute(RemoveVehicleView(spot: spot,)))
+            : Navigator.of(context).push(CreateRoute.pushRoute(AddVehicleView(spot: spot,)));
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 3, horizontal: 0),
@@ -35,7 +43,9 @@ class SpotCard extends StatelessWidget {
                     padding: EdgeInsets.zero,
                     margin: EdgeInsets.zero,
                     width: MediaQuery.of(context).size.width * 0.15,
-                    color: spot.plate == null ? Colors.green.shade400 : Colors.red.shade400,
+                    color: locator<SpotController>().isSpotInUse(spot: spot)
+                        ? Colors.green.shade400
+                        : Colors.red.shade400,
                     child: Center(
                       child: Text('${spot.id}',
                         style: TextStyle(color: Colors.white, fontSize: 25),
@@ -46,12 +56,25 @@ class SpotCard extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: kVPadding/2, horizontal: kHPadding/2),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Vaga ${spot.id}',
                         style: TextStyle(fontSize: kTextSize),
                       ),
-                      Text(spot.plate ?? 'Livre'),
-                      Text('${spot.inDateTime ?? ''}'),
+                      Text(((){
+                        if(spot.plate == null){
+                          return "Livre";
+                        } else {
+                          return "Placa: ${spot.plate}";
+                        }
+                      }())),
+                      Text("Entrada: " + ((){
+                        if(spot.inDateTime == null){
+                          return "-";
+                        } else {
+                          return "${DateConverter.dateToString(spot.inDateTime!, format: "dd/MM - HH:mm")}";
+                        }
+                      }())),
 
                     ],
                   ),
