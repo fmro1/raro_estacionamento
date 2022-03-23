@@ -1,16 +1,24 @@
-# raro_estacionamento
+# Gerenciador simples de estacionamento
 
 Gerenciador de estacionamento
 
-## Getting Started
+Aplicativo de teste para gerenciar um estecionamento.
 
-This project is a starting point for a Flutter application.
+![Screenshot_1648075725](https://user-images.githubusercontent.com/31592577/159809616-efc6e9f6-e16b-46ee-b2c8-c370a41aebbb.png)
+![Screenshot_1648075740](https://user-images.githubusercontent.com/31592577/159809684-aeb06d79-587a-4a97-8f03-a77c71c50940.png)
+![Screenshot_1648075666](https://user-images.githubusercontent.com/31592577/159809717-93a3a975-56f0-4ee7-9300-cda0378ea037.png)
+![Screenshot_1648075685](https://user-images.githubusercontent.com/31592577/159809714-c5f772a9-b4eb-4b8c-a8d0-9bd352a088d3.png)
 
-A few resources to get you started if this is your first Flutter project:
+## Projeto desenvolvido em flutter com utilização de banco de dados do Firebase.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+A tela incial possui 4 botoes principais com funcionalidades distintas: 
+ - Entrada - adicionar um veiculo que chegou;
+ - Saída - Remover algum veículo de uma vaga;
+ - Hoje - Mostra todas as movimentações que aconteceram no dia pelo relógio interno do aparelho;
+ - Histórico - Mostra o historico de todas as movimentações desde o inicio.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Tomei como base um estacionamento de 100 vagas, e dividi o banco em Histórico e Vagas.
+
+Tento separar o código em modelos, controladores e parte visual. Tive meu primeiro contato com o pacote GetIt, porém ainda mantive o provider para gerencimento de estado.
+
+Não tenho tanta habilidade com os testes, e a maioria que tentei fazer foram para garantir que interface de usuário não quebre.
