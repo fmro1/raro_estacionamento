@@ -11,3 +11,5 @@ final double kHMargin = 8;
 final double kVMargin = 8;
 
 final double kDefaultRadius = 6.0;
+
+final TextStyle defaultStyle = TextStyle(fontSize: kTextSize);
