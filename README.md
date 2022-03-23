@@ -20,3 +20,5 @@ Tomei como base um estacionamento de 100 vagas, e dividi o banco em Histórico e
 Tento separar o código em modelos, controladores e parte visual. Tive meu primeiro contato com o pacote GetIt, porém ainda mantive o provider para gerencimento de estado.
 
 Não tenho tanta habilidade com os testes, e a maioria que tentei fazer foram para garantir que interface de usuário não quebre.
+
+Versão do flutter: 2.13.0
