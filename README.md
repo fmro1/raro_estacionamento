@@ -19,7 +19,7 @@ Tomei como base um estacionamento de 100 vagas, e dividi o banco em Histórico e
 
 Tento separar o código em modelos, controladores e parte visual. Fiz meu primeiro contato com o pacote GetIt, achei interessante seu funcionamento e fácil de usar. Fiz a utilização do provider como gerenciador de estado, pois estou mais habituado com seu funcionamento.
 
-Tive dificuldade para testar as streams e as conexoes com o firebase database, para testar eu utilizei diretamente os dados do firebase alterando as tabelas.
+Tive dificuldade para testar as streams e as conexoes com o firebase database, para testar eu utilizei diretamente os dados do firebase alterando as tabelas, não consegui fazer testes unitários para essa parte.
 Os meus testes unitários e de widgets estão focados em verificar se a interface de usuario não fica bloqueada por recebimento de dados diferentes do esperado.
 
 
