@@ -17,8 +17,10 @@ A tela incial possui 4 botoes principais com funcionalidades distintas:
 
 Tomei como base um estacionamento de 100 vagas, e dividi o banco em Histórico e Vagas.
 
-Tento separar o código em modelos, controladores e parte visual. Tive meu primeiro contato com o pacote GetIt, porém ainda mantive o provider para gerencimento de estado.
+Tento separar o código em modelos, controladores e parte visual. Fiz meu primeiro contato com o pacote GetIt, achei interessante seu funcionamento e fácil de usar. Fiz a utilização do provider como gerenciador de estado, pois estou mais habituado com seu funcionamento.
 
-Tive dificuldade para testar as streams e as conexoes com o firebase database. Os testes estão focados em verificar se a interface de usuario não fica bloqueada por receimento de dados diferentes do esperado.
+Tive dificuldade para testar as streams e as conexoes com o firebase database, para testar eu utilizei diretamente os dados do firebase alterando as tabelas.
+Os meus testes unitários e de widgets estão focados em verificar se a interface de usuario não fica bloqueada por recebimento de dados diferentes do esperado.
+
 
 Versão do flutter: 2.13.0
